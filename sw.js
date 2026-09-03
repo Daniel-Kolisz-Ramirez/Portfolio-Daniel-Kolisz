@@ -1,4 +1,4 @@
-const CACHE_NAME = "portfoliogis-cache-v17";
+const CACHE_NAME = "portfoliogis-cache-v19";
 const ASSETS = [
   "./",
   "./index.html",
@@ -27,6 +27,9 @@ self.addEventListener("activate", (event) => {
 /* Estrategia "stale-while-revalidate": la app se abre AL INSTANTE con la
    copia guardada, y en segundo plano se descarga la version mas reciente. */
 self.addEventListener("fetch", (event) => {
+  if (new URL(event.request.url).origin !== self.location.origin) {
+    return;
+  }
   if (event.request.mode === "navigate") {
     event.respondWith(
       caches.match("./index.html").then((cached) => {

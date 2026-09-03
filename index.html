@@ -416,6 +416,12 @@
   }
   .admin-gear-btn:hover { opacity: 1; color: var(--accent-bright); }
   .admin-gear-btn.active { opacity: 0.85; color: var(--accent); border-color: var(--accent); }
+  .visit-counter {
+    position: fixed; left: 54px; bottom: calc(20px + env(safe-area-inset-bottom));
+    font-size: 0.72rem; color: var(--muted); background: var(--card2);
+    border: 1px solid var(--border); border-radius: 20px; padding: 6px 12px;
+    z-index: 40;
+  }
   .nav-link.active { color: var(--accent-bright); }
   .nav-link.active::after { right: 0; background: var(--accent-bright); }
 
@@ -521,6 +527,7 @@
     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
   </svg>
 </button>
+<div id="visitCounter" class="visit-counter" style="display:none;"></div>
 
 <div id="lightbox" class="lightbox" style="display:none;">
   <button class="lightbox-close" id="lightboxClose">✕</button>
@@ -575,6 +582,33 @@ function isAdmin() { return !!getAdminCode(); }
 
 function updateAdminGearBtn() {
   document.getElementById('adminGearBtn').classList.toggle('active', isAdmin());
+  updateVisitCounterDisplay();
+}
+
+async function registerVisit() {
+  if (isAdmin() || !supabaseClient) return;
+  if (sessionStorage.getItem('visitCounted')) return;
+  sessionStorage.setItem('visitCounted', '1');
+  try {
+    await supabaseClient.rpc('increment_page_view');
+  } catch (e) {
+    console.error("No se pudo registrar la visita:", e);
+  }
+}
+
+async function updateVisitCounterDisplay() {
+  const el = document.getElementById('visitCounter');
+  if (!el) return;
+  if (!isAdmin() || !supabaseClient) { el.style.display = "none"; return; }
+  try {
+    const { data, error } = await supabaseClient.from('page_stats').select('views').eq('id', 'main').maybeSingle();
+    if (error) throw error;
+    el.textContent = (data && data.views != null) ? data.views.toLocaleString('es-ES') + " visitas" : "0 visitas";
+    el.style.display = "block";
+  } catch (e) {
+    console.error("No se pudo leer el contador:", e);
+    el.style.display = "none";
+  }
 }
 
 async function tryUnlockAdmin() {
@@ -1254,10 +1288,10 @@ function renderDetail(app) {
       ${p.gallery && p.gallery.length ? `<div class="case-section-title">Galería</div><div class="gallery-grid">${p.gallery.map((g, i) => { const item = typeof g === "string" ? { url: g, title: "" } : g; return `<div class="gallery-card"><img src="${item.url}" alt="" class="gallery-img-click" data-idx="${i}">${item.title ? `<div class="gallery-card-title">${escapeHtml(item.title)}</div>` : ""}</div>`; }).join('')}</div>` : ""}
       ${(p.codeBlocks && p.codeBlocks.length) ? p.codeBlocks.map(cb => `<div class="case-section-title">${escapeHtml(cb.title || "Código")}</div><pre class="code-block"><code>${escapeHtml(cb.code)}</code></pre>`).join('') : (p.codeSnippet ? `<div class="case-section-title">Código</div><pre class="code-block"><code>${escapeHtml(p.codeSnippet)}</code></pre>` : "")}
       <div class="detail-links-row">
-        ${p.pdfUrl ? `<a class="pdf-btn" href="${escapeAttr(p.pdfUrl)}" target="_blank" rel="noopener">📄 Documento PDF</a>` : ""}
-        ${p.codeUrl ? `<a class="pdf-btn" href="${escapeAttr(p.codeUrl)}" target="_blank" rel="noopener">💻 Código del proyecto</a>` : ""}
-        ${hasMap && p.cover ? `<a class="pdf-btn" href="${escapeAttr(p.mapUrl)}" target="_blank" rel="noopener">🗺️ Abrir mapa en pestaña nueva</a>` : ""}
-        ${hasVideo && hasMap ? `<a class="pdf-btn" href="${escapeAttr(p.videoUrl)}" target="_blank" rel="noopener">🎬 Ver vídeo</a>` : ""}
+        ${p.pdfUrl ? `<a class="pdf-btn" href="${escapeAttr(p.pdfUrl)}" target="_blank" rel="noopener">Documento PDF</a>` : ""}
+        ${p.codeUrl ? `<a class="pdf-btn" href="${escapeAttr(p.codeUrl)}" target="_blank" rel="noopener">Código del proyecto</a>` : ""}
+        ${hasMap && p.cover ? `<a class="pdf-btn" href="${escapeAttr(p.mapUrl)}" target="_blank" rel="noopener">Abrir mapa en pestaña nueva</a>` : ""}
+        ${hasVideo && hasMap ? `<a class="pdf-btn" href="${escapeAttr(p.videoUrl)}" target="_blank" rel="noopener">Ver vídeo</a>` : ""}
       </div>
       ${isAdmin() ? `
       <div class="edit-row">
@@ -1642,6 +1676,7 @@ function renderForm(app) {
 try {
   render();
   updateAdminGearBtn();
+  registerVisit();
   fetchProjectsFromCloud();
   fetchProfileFromCloud();
 } catch (e) {
