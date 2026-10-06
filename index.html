@@ -955,8 +955,6 @@ function renderHome(app) {
   if (carouselIndex >= featured.length) carouselIndex = 0;
   const latest = projects.slice().sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 3);
 
-  const catSet = new Set();
-  projects.forEach(pr => getProjectCategories(pr).forEach(c => catSet.add(c)));
   const heroHtml = `
     <section class="hero-section" id="hero">
       <div class="hero-bg" style="${profile.heroImage ? `background-image:url('${escapeAttr(profile.heroImage)}');` : ""}"></div>
@@ -969,10 +967,6 @@ function renderHome(app) {
           <div class="hero-actions">
             <button class="hero-cta solid" data-nav="portfolio">Ver proyectos</button>
             <button class="hero-cta" data-nav="resume">Currículum</button>
-          </div>
-          <div class="hero-stats">
-            <div><div class="stat-num">${projects.length}</div><div class="stat-label">Proyectos</div></div>
-            <div><div class="stat-num">${catSet.size}</div><div class="stat-label">Áreas</div></div>
           </div>
         </div>
       </div>
