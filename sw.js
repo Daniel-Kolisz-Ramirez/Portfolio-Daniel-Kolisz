@@ -1,4 +1,4 @@
-const CACHE_NAME = "portfoliogis-cache-v19";
+const CACHE_NAME = "portfoliogis-cache-v20";
 const ASSETS = [
   "./",
   "./index.html",
