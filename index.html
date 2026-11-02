@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Portfolio GIS</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1b2632">
+<meta name="theme-color" content="#fbf7f1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Portfolio GIS">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
@@ -601,6 +601,73 @@
   .contact-full .contact-link { padding: 14px 24px; font-size: 0.88rem; }
   .contact-full .section-heading { margin-bottom: 28px; }
   @media (max-width: 600px) { .nav-inner { flex-wrap: wrap; gap: 4px 8px; padding: 10px 14px 4px; padding-top: calc(10px + env(safe-area-inset-top)); } .nav-logo { font-size: 0.8rem; } .nav-links { flex: 1 1 100%; justify-content: space-between; gap: 8px; overflow: visible; } .nav-link { font-size: 0.68rem; letter-spacing: 0.2px; } }
+
+  :root { --mono: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  body, button, input, textarea, select, .serif, h1, h2, h3, h4, .tile-title, .carousel-title, .nav-logo, .stat-num, .detail-title, .about-text, .case-desc, .timeline-card, .rte-editor, .field input, .field textarea, .nav-link, .filter-chip, .tile-cat, .case-cat, .site-footer, .lb-level {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .code-block, .code-block code, .cb-code { font-family: 'SF Mono', Consolas, Monaco, monospace; }
+  .eyebrow, .hero-topo { display: none; }
+  .section-heading::before, .page-title::before { display: none; }
+  .hero-section { background: var(--bg); border-bottom: none; }
+  .hero-inner { padding: 96px 24px 72px; }
+  .hero-name { font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.01em; }
+  .hero-tagline { font-size: clamp(1.05rem, 1.8vw, 1.2rem); color: #c9ced4; }
+  .hero-cta { border-radius: 999px; padding: 12px 26px; font-size: 0.95rem; font-weight: 700; }
+  .section-heading, .page-title { font-weight: 800; letter-spacing: 0; }
+  .about-text, .case-desc, .about-full-text, .timeline-desc, .carousel-desc, .about-tags, .about-cert-item { font-size: 1rem; line-height: 1.75; }
+  .nav-link { letter-spacing: 0.3px; font-weight: 700; font-size: 0.82rem; }
+  .nav-logo { font-weight: 800; letter-spacing: 0; }
+  .tile, .carousel-slide, .timeline-card, .info-box, .about-full-photo img { border-radius: 18px; }
+  .tile { border: none; box-shadow: 0 6px 22px -10px rgba(0,0,0,0.45); }
+  .tile-overlay { border-top: none; padding: 16px 18px 18px; }
+  .tile-title { font-size: 1rem; font-weight: 700; }
+  .tile-cat { font-size: 0.78rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--accent); margin-top: 6px; }
+  .case-cat { letter-spacing: 0; text-transform: none; font-size: 0.85rem; font-weight: 700; }
+  .filter-chip { font-size: 0.85rem; letter-spacing: 0; }
+  .contact-link { border-radius: 999px; font-weight: 700; }
+  .site-footer { letter-spacing: 0; font-size: 0.8rem; border-top: none; }
+  .about-section, .featured-section, .contact-section, .latest-work-section { padding-top: 56px; padding-bottom: 56px; }
+  .about-section, .featured-section, .proyectos-section, .contact-section { border-top: none; }
+
+  :root {
+    --bg: #fbf7f1; --card: #ffffff; --card2: #f5efe6; --border: #e8dfd2;
+    --text: #3b3430; --muted: #85796d; --accent: #c8643c; --accent-bright: #a9502c;
+    --accent-soft: rgba(200,100,60,0.11); --red: #c0463d;
+  }
+  html, body { background: var(--bg); color: var(--text); }
+  .site-nav { background: rgba(251,247,241,0.92); }
+  .nav-link:hover { color: var(--text); }
+  .about-text, .about-full-text, .about-tags, .about-cert-item, .timeline-desc, .case-desc, .hero-tagline, .carousel-desc { color: #5a4f47; }
+  .hero-name, .section-heading, .page-title, .detail-title { color: var(--text); }
+  .hero-bg::after { background: linear-gradient(90deg, var(--bg) 8%, rgba(251,247,241,0.5) 100%); }
+  .hero-section { background: linear-gradient(180deg, #fbf7f1 0%, #f5ede1 100%); }
+  .hero-cta { color: var(--text); border-color: #d9cdbd; background: #fff; }
+  .hero-cta:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-bright); }
+  .hero-cta.solid, .primary-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .hero-cta.solid:hover, .primary-btn:hover { background: var(--accent-bright); color: #fff; }
+  .fab { color: #fff; box-shadow: 0 8px 24px rgba(200,100,60,0.35); }
+  .tile { box-shadow: 0 6px 22px -12px rgba(90,70,50,0.35); background: var(--card); }
+  .tile-overlay, .carousel-info { background: var(--card); }
+  .tile:hover { box-shadow: 0 14px 32px -14px rgba(90,70,50,0.4); }
+  .carousel-slide, .timeline-card, .info-box, .contact-link { background: var(--card); border-color: var(--border); }
+  .carousel-img, .teaser-tile img { background: var(--card2); }
+  .about-extra-bg { background: var(--card2); }
+  .filter-chip { background: #fff; color: var(--muted); border-color: var(--border); }
+  .filter-chip:hover { color: var(--text); border-color: var(--accent); }
+  .filter-chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-bright); }
+  .contact-link { color: var(--text); }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent-bright); }
+  .back-btn-icon { background: rgba(255,255,255,0.92); color: var(--text); border-color: var(--border); box-shadow: 0 4px 14px -6px rgba(90,70,50,0.35); }
+  .admin-gear-btn, .visit-counter, .edit-profile-btn { background: #fff; }
+  #toast { background: #fff; box-shadow: 0 8px 24px rgba(90,70,50,0.25); }
+  .timeline-dot { background: var(--bg); }
+  .teaser-tile:hover img { filter: brightness(0.6); }
+  .lightbox { background: rgba(40,32,26,0.93); }
+  .lb-toolbar, .lightbox-close, .lightbox-arrow, #lightboxCaption { background: rgba(255,255,255,0.94); color: var(--text); border-color: var(--border); }
+  .lb-btn { color: var(--text); }
+  .lb-level { color: var(--muted); }
+  .lightbox-close, .lightbox-arrow { color: var(--text); }
 </style>
 </head>
 <body>
